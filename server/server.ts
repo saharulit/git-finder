@@ -1,9 +1,12 @@
-const express = require('express');
-const cors = require('cors');
-const githubRoutes = require('./routes/github');
+import express from 'express';
+import dotenv from 'dotenv';
+import cors from 'cors';
 
+import githubRoutes from './src/routes/github';
+
+dotenv.config();
 const app = express();
-const PORT = 3010;
+const PORT = process.env.PORT || 3010;
 
 app.use(cors());
 app.use(express.json());

@@ -1,9 +1,9 @@
 {
-  "name": "cloud-ui",
+  "name": "git-finder",
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "concurrently \"npm start -w server\" \"npm run dev -w client\" "
+    "start": "concurrently \"npm run dev -w server\" \"npm run dev -w client\" "
   },
   "workspaces": ["client", "server"],
   "devDependencies": {
