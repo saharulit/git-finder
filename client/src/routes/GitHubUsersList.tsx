@@ -3,6 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import debounce from 'lodash.debounce';
 import Card from '../components/Card';
 import { GitHubUser } from '../entities/gitHubUser';
+import CounterDisplay from '../components/counterDisplay';
 
 const GitHubUsersList: React.FC = () => {
   const [gitHubUsersList, setGitHubUsersList] = useState<GitHubUser[]>([]);
@@ -69,7 +70,15 @@ const GitHubUsersList: React.FC = () => {
           className="w-full p-2 border rounded"
         />
       </div>
-      {search && <div>Total results: {totalResults}</div>}
+      {search && (
+        <div className="pt-4">
+          <CounterDisplay
+            title="Total results"
+            count={totalResults}
+            className="text-lg"
+          />
+        </div>
+      )}
       <InfiniteScroll
         dataLength={gitHubUsersList.length}
         next={() => setPage((prev) => prev + 1)} // Increment page for more results
