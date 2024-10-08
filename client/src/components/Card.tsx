@@ -9,6 +9,7 @@ interface GitHubUserCardProps {
 const GitHubUserCard: React.FC<GitHubUserCardProps> = ({ user }) => {
   return (
     <a
+      key={user.username}
       href={`${GITHUB_URL}/${user.username}`}
       target="_blank"
       rel="noopener noreferrer"
