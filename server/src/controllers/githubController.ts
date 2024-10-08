@@ -26,6 +26,7 @@ export const searchGitHubUsers = async (req: Request, res: Response) => {
         headers: {
           Accept: 'application/vnd.github+json',
           'X-GitHub-Api-Version': '2022-11-28',
+          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
         },
       }
     );
@@ -42,6 +43,7 @@ export const searchGitHubUsers = async (req: Request, res: Response) => {
             headers: {
               Accept: 'application/vnd.github+json',
               'X-GitHub-Api-Version': '2022-11-28',
+              Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
             },
           }
         );
@@ -60,16 +62,20 @@ export const searchGitHubUsers = async (req: Request, res: Response) => {
 
     res.json({
       totalCount: totalCount,
-      totalPages: totalPages,
-      page,
-      perPage: perPage,
-      hasNextPage: hasNextPage,
-      users: userData,
+      pageInfo: {
+        totalPages: totalPages,
+        page,
+        perPage: perPage,
+        hasNextPage: hasNextPage,
+      },
+      data: userData,
     });
     return;
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'An error occurred while fetching data from GitHub' });
+    res
+      .status(500)
+      .json({ error: 'An error occurred while fetching data from GitHub' });
     return;
   }
 };
