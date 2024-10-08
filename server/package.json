@@ -1,5 +1,5 @@
 {
-  "name": "express-simple-starter",
+  "name": "git-finder-server",
   "private": true,
   "scripts": {
     "start": "node --watch index.js"
