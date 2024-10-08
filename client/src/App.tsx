@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import GitHubUsersList from './routes/GitHubUsersList';
 
 function App() {
   const [beatles, setBeatles] = useState([]);
@@ -15,13 +16,7 @@ function App() {
       })
       .catch((error) => console.log(error));
   }, []);
-  return (
-    <ul>
-      {beatles.map(({ name }) => (
-        <li key={name}>{name}</li>
-      ))}
-    </ul>
-  );
+  return <GitHubUsersList />;
 }
 
 export default App;
