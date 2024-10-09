@@ -2,8 +2,9 @@ import { useEffect, useState, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import debounce from 'lodash.debounce';
 import Card from '../components/Card';
-import { GitHubUser } from '../entities/gitHubUser';
 import CounterDisplay from '../components/counterDisplay';
+import { GitHubService } from '../services/GitHubService';
+import { GitHubUser } from '../entities/gitHubUser';
 
 const GitHubUsersList: React.FC = () => {
   const [gitHubUsersList, setGitHubUsersList] = useState<GitHubUser[]>([]);
@@ -13,35 +14,35 @@ const GitHubUsersList: React.FC = () => {
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchData = (pageNumber: number, query: string) => {
+  const fetchData = async (pageNumber: number, query: string) => {
     if (!query) return;
     setLoading(true);
-    fetch(
-      `http://localhost:3010/api/search_github_users?q=${query}&page=${pageNumber}&per_page=15`,
-      { method: 'GET' }
-    )
-      .then((response) => response.json())
-      .then(({ data, totalCount, pageInfo }) => {
-        setHasMore(pageInfo.hasNextPage);
-        setGitHubUsersList((prevUsers) => [...prevUsers, ...data]);
-        setTotalResults(totalCount);
-      })
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
+    try {
+      const { data, totalCount, pageInfo } = await GitHubService.searchUsers(
+        query,
+        pageNumber
+      );
+      setHasMore(pageInfo.hasNextPage);
+      setGitHubUsersList((prevUsers) => [...prevUsers, ...data]);
+      setTotalResults(totalCount);
+    } catch (error) {
+      console.error('Failed to fetch users', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const debouncedSearchHandler = useMemo(
     () =>
       debounce((value: string) => {
-        setSearch(value); // Update the search term
-        setGitHubUsersList([]); // Reset the list when a new search is performed
-        setPage(1); // Reset the page number for the new search
-        setHasMore(true); // Reset the `hasMore` state to true
+        setSearch(value);
+        setGitHubUsersList([]);
+        setPage(1);
+        setHasMore(true);
         setTotalResults(0);
-        // Fetch new data after resetting the page and list
         fetchData(1, value);
-      }, 500), // 500ms delay
-    [] // Dependencies array
+      }, 500),
+    []
   );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,8 +82,8 @@ const GitHubUsersList: React.FC = () => {
       )}
       <InfiniteScroll
         dataLength={gitHubUsersList.length}
-        next={() => setPage((prev) => prev + 1)} // Increment page for more results
-        hasMore={hasMore && !loading} // Only allow more fetching if not loading
+        next={() => setPage((prev) => prev + 1)}
+        hasMore={hasMore && !loading}
         loader={<h4></h4>}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
