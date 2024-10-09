@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import debounce from 'lodash.debounce';
-import Card from '../components/Card';
+import Card from '../components/GitHubUserCard';
 import CounterDisplay from '../components/counterDisplay';
 import { GitHubService } from '../services/GitHubService';
 import { GitHubUser } from '../entities/gitHubUser';
@@ -14,11 +14,13 @@ const GitHubUsersList: React.FC = () => {
   const [search, setSearch] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
+  const gitHubService = new GitHubService();
+
   const fetchData = async (pageNumber: number, query: string) => {
     if (!query) return;
     setLoading(true);
     try {
-      const { data, totalCount, pageInfo } = await GitHubService.searchUsers(
+      const { data, totalCount, pageInfo } = await gitHubService.searchUsers(
         query,
         pageNumber
       );

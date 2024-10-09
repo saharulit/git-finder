@@ -10,14 +10,20 @@ export interface GitHubUserResponse {
   };
 }
 
-export const GitHubService = {
-  searchUsers: async (
+export class GitHubService {
+  baseUrl: string;
+
+  constructor(baseUrl: string = BASE_URL) {
+    this.baseUrl = baseUrl;
+  }
+
+  async searchUsers(
     query: string,
     page: number,
     perPage: number = 15
-  ): Promise<GitHubUserResponse> => {
+  ): Promise<GitHubUserResponse> {
     const response = await fetch(
-      `${BASE_URL}/search_github_users?q=${query}&page=${page}&per_page=${perPage}`,
+      `${this.baseUrl}/search_github_users?q=${query}&page=${page}&per_page=${perPage}`,
       {
         method: 'GET',
       }
@@ -29,5 +35,5 @@ export const GitHubService = {
 
     const result = await response.json();
     return result as GitHubUserResponse;
-  },
-};
+  }
+}
