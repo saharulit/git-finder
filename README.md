@@ -38,4 +38,6 @@ npm start
 This endpoint retrieves user data including the username, profile image, and number of public repositories.
 
 ## Run Unit tests
+```
 npm test
+```
