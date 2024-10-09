@@ -26,7 +26,7 @@ export const searchGitHubUsers = async (req: Request, res: Response) => {
         headers: {
           Accept: 'application/vnd.github+json',
           'X-GitHub-Api-Version': '2022-11-28',
-          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+          Authorization: `Bearer ${process?.env?.GITHUB_TOKEN}`,
         },
       }
     );
@@ -72,7 +72,6 @@ export const searchGitHubUsers = async (req: Request, res: Response) => {
     });
     return;
   } catch (error) {
-    console.error(error);
     res
       .status(500)
       .json({ error: 'An error occurred while fetching data from GitHub' });
