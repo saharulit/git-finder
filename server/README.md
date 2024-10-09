@@ -1,4 +1,4 @@
-# GitHub User Search Application - Client (Frontend)
+# GitHub User Search Application - Server (Backend)
 
 ## Overview
 
