@@ -1,4 +1,5 @@
 import { GitHubUser } from '../entities/gitHubUser';
+import { DEFAULT_LIMIT } from './consts';
 
 export const BASE_URL = 'http://localhost:3010/api';
 
@@ -13,7 +14,7 @@ export interface GitHubUserResponse {
 export const searchUsers = async (
   query: string,
   page: number,
-  perPage = 15
+  perPage = DEFAULT_LIMIT
 ): Promise<GitHubUserResponse> => {
     const response = await fetch(
       `${BASE_URL}/search_github_users?q=${query}&page=${page}&per_page=${perPage}`,

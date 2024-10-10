@@ -1,14 +1,15 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import debounce from 'lodash.debounce';
 import { CounterDisplay } from '../components/CounterDisplay/CounterDisplay';
 import { GitHubUser } from '../entities/gitHubUser';
 import { searchUsers } from '../services/GitHubService';
 import { GitHubUserCard } from '../components/GitHubUserCard/GitHubUserCard';
+import { DEFAULT_PAGE } from '../services/consts';
 
 export const GitHubUsersList: React.FC = () => {
   const [gitHubUsersList, setGitHubUsersList] = useState<GitHubUser[]>([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(DEFAULT_PAGE);
   const [hasMore, setHasMore] = useState(true);
   const [totalResults, setTotalResults] = useState(0);
   const [search, setSearch] = useState('');
@@ -32,16 +33,17 @@ export const GitHubUsersList: React.FC = () => {
     }
   };
 
-  const debouncedSearchHandler = useMemo(
-    () =>
-      debounce((value: string) => {
-        setSearch(value);
-        setGitHubUsersList([]);
-        setPage(1);
-        setHasMore(true);
-        setTotalResults(0);
-        fetchData(1, value);
-      }, 500),
+  // The empty dependency array is used to ensure that the debounced function does not change between renders.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSearchHandler = useCallback(
+    debounce((value: string) => {
+      setSearch(value);
+      setGitHubUsersList([]);
+      setPage(DEFAULT_PAGE);
+      setHasMore(true);
+      setTotalResults(0);
+      fetchData(DEFAULT_PAGE, value);
+    }, 500),
     []
   );
 
@@ -56,7 +58,7 @@ export const GitHubUsersList: React.FC = () => {
   }, [debouncedSearchHandler]);
 
   useEffect(() => {
-    if (page > 1 && search) {
+    if (page > DEFAULT_PAGE && search) {
       fetchData(page, search);
     }
   }, [page, search]);
