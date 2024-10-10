@@ -1,7 +1,7 @@
 import React from 'react';
-import { GitHubUser } from '../entities/gitHubUser';
-import { GITHUB_URL } from '../consts';
-import CounterDisplay from './counterDisplay';
+import { GitHubUser } from '../../entities/gitHubUser';
+import { GITHUB_URL } from '../../consts';
+import CounterDisplay from '../CounterDisplay/CounterDisplay';
 
 interface GitHubUserCardProps {
   user: GitHubUser;
@@ -25,7 +25,11 @@ const GitHubUserCard: React.FC<GitHubUserCardProps> = ({ user }) => {
         <div className="font-bold text-lg mb-2 text-center">
           {user.username}
         </div>
-        <CounterDisplay title='Public Repositories' count={user.publicRepos} className='text-sm'/>
+        <CounterDisplay
+          title="Public Repositories"
+          count={user.publicRepos}
+          className="text-sm"
+        />
       </div>
     </a>
   );

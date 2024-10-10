@@ -1,8 +1,7 @@
-import { GitHubService } from './GitHubService';
 import { mockUsers } from '../entities/gitHubUser';
+import { BASE_URL, searchUsers } from './GitHubService';
 
 describe('GitHubService', () => {
-  const service = new GitHubService();
 
   afterEach(() => {
     vi.restoreAllMocks();
@@ -21,7 +20,7 @@ describe('GitHubService', () => {
     };
     vi.spyOn(global, 'fetch').mockResolvedValueOnce(mockFetchResponse as Response);
 
-    const result = await service.searchUsers('userName', 1,2);
+    const result = await searchUsers('userName', 1,2);
 
     expect(result).toEqual({
       data: mockUsers,
@@ -32,7 +31,7 @@ describe('GitHubService', () => {
     });
 
     expect(global.fetch).toHaveBeenCalledWith(
-      `${service.baseUrl}/search_github_users?q=userName&page=1&per_page=2`,
+      `${BASE_URL}/search_github_users?q=userName&page=1&per_page=2`,
       { method: 'GET' }
     );
   });

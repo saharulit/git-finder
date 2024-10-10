@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { GitHubUser } from '../entities/gitHubUser';
+import { GitHubUser } from '../../entities/gitHubUser';
 import Card from './GitHubUserCard';
 import GitHubUserCard from './GitHubUserCard';
 

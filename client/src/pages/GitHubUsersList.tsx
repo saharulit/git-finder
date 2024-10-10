@@ -1,26 +1,24 @@
 import { useEffect, useState, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import debounce from 'lodash.debounce';
-import Card from '../components/GitHubUserCard';
-import CounterDisplay from '../components/counterDisplay';
-import { GitHubService } from '../services/GitHubService';
+import Card from '../components/GitHubUserCard/GitHubUserCard';
+import CounterDisplay from '../components/CounterDisplay/CounterDisplay';
 import { GitHubUser } from '../entities/gitHubUser';
+import { searchUsers } from '../services/GitHubService';
 
 const GitHubUsersList: React.FC = () => {
   const [gitHubUsersList, setGitHubUsersList] = useState<GitHubUser[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [totalResults, setTotalResults] = useState<number>(0);
-  const [search, setSearch] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const gitHubService = new GitHubService();
+  const [totalResults, setTotalResults] = useState(0);
+  const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async (pageNumber: number, query: string) => {
     if (!query) return;
     setLoading(true);
     try {
-      const { data, totalCount, pageInfo } = await gitHubService.searchUsers(
+      const { data, totalCount, pageInfo } = await searchUsers(
         query,
         pageNumber
       );

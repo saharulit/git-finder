@@ -1,15 +1,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import GitHubUsersList from './GitHubUsersList';
-import { GitHubService } from '../services/GitHubService';
 
 vi.mock('../services/GitHubService');
 
 describe('GitHubUsersList', () => {
-  beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (GitHubService as any).mockClear(); // Clear previous mock calls
-  });
-
   it('renders input and displays users after search', async () => {
     render(<GitHubUsersList />);
 
