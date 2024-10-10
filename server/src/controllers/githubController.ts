@@ -8,6 +8,27 @@ interface GitHubUser {
   publicRepos: number;
 }
 
+const getGitHubHeaders = (): Record<string, string> => {
+  const headers: Record<string, string> = {
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+
+  if (process?.env?.GITHUB_TOKEN) {
+    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  }
+
+  return headers;
+};
+
+const getPublicRepoCount = async (username: string): Promise<number> => {
+  const userResponse = await axios.get(`${BASE_GITHUB_API_URL}/users/${username}`, {
+    headers: getGitHubHeaders(),
+  });
+
+  return userResponse.data.public_repos;
+};
+
 export const searchGitHubUsers = async (req: Request, res: Response) => {
   const query = req.query.q as string;
   const page = parseInt(req.query.page as string) || 1;
@@ -23,42 +44,25 @@ export const searchGitHubUsers = async (req: Request, res: Response) => {
       `${BASE_GITHUB_API_URL}/search/users`,
       {
         params: { q: query, page, per_page: perPage },
-        headers: {
-          Accept: 'application/vnd.github+json',
-          'X-GitHub-Api-Version': '2022-11-28',
-          Authorization: `Bearer ${process?.env?.GITHUB_TOKEN}`,
-        },
+        headers: getGitHubHeaders(),
       }
     );
 
     const users = usersResponse.data.items;
     const totalCount = usersResponse.data.total_count;
     const totalPages = Math.ceil(totalCount / perPage);
+    const hasNextPage = page < totalPages;
 
-    const userPromises = users.map(
-      async (user: { login: string; avatar_url: string }) => {
-        const userResponse = await axios.get(
-          `${BASE_GITHUB_API_URL}/users/${user.login}`,
-          {
-            headers: {
-              Accept: 'application/vnd.github+json',
-              'X-GitHub-Api-Version': '2022-11-28',
-              Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-            },
-          }
-        );
-
-        return {
-          username: user.login,
-          image: user.avatar_url,
-          publicRepos: userResponse.data.public_repos,
-        } as GitHubUser;
-      }
-    );
+    const userPromises = users.map(async (user: { login: string; avatar_url: string }) => {
+      const publicRepos = await getPublicRepoCount(user.login);
+      return {
+        username: user.login,
+        image: user.avatar_url,
+        publicRepos: publicRepos,
+      };
+    });
 
     const userData: GitHubUser[] = await Promise.all(userPromises);
-
-    const hasNextPage = page < totalPages;
 
     res.json({
       totalCount: totalCount,
@@ -72,9 +76,7 @@ export const searchGitHubUsers = async (req: Request, res: Response) => {
     });
     return;
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: 'An error occurred while fetching data from GitHub' });
+    res.status(500).json({ error: 'An error occurred while fetching data from GitHub' });
     return;
   }
 };
