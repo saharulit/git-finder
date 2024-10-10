@@ -1,12 +1,12 @@
 import { useEffect, useState, useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import debounce from 'lodash.debounce';
-import Card from '../components/GitHubUserCard/GitHubUserCard';
-import CounterDisplay from '../components/CounterDisplay/CounterDisplay';
+import { CounterDisplay } from '../components/CounterDisplay/CounterDisplay';
 import { GitHubUser } from '../entities/gitHubUser';
 import { searchUsers } from '../services/GitHubService';
+import { GitHubUserCard } from '../components/GitHubUserCard/GitHubUserCard';
 
-const GitHubUsersList: React.FC = () => {
+export const GitHubUsersList: React.FC = () => {
   const [gitHubUsersList, setGitHubUsersList] = useState<GitHubUser[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -92,7 +92,7 @@ const GitHubUsersList: React.FC = () => {
           ) : search ? (
             gitHubUsersList.length > 0 ? (
               gitHubUsersList.map((user) => (
-                <Card key={user.username} user={user} />
+                <GitHubUserCard key={user.username} user={user} />
               ))
             ) : (
               <div>No results found for '{search}'.</div>
@@ -105,5 +105,3 @@ const GitHubUsersList: React.FC = () => {
     </div>
   );
 };
-
-export default GitHubUsersList;

@@ -1,13 +1,13 @@
 import React from 'react';
 import { GitHubUser } from '../../entities/gitHubUser';
 import { GITHUB_URL } from '../../consts';
-import CounterDisplay from '../CounterDisplay/CounterDisplay';
+import { CounterDisplay } from '../CounterDisplay/CounterDisplay';
 
 interface GitHubUserCardProps {
   user: GitHubUser;
 }
 
-const GitHubUserCard: React.FC<GitHubUserCardProps> = ({ user }) => {
+export const GitHubUserCard: React.FC<GitHubUserCardProps> = ({ user }) => {
   return (
     <a
       key={user.username}
@@ -34,5 +34,3 @@ const GitHubUserCard: React.FC<GitHubUserCardProps> = ({ user }) => {
     </a>
   );
 };
-
-export default GitHubUserCard;

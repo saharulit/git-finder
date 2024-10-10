@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import GitHubUsersList from './GitHubUsersList';
+import { GitHubUsersList } from './GitHubUsersList';
 
 vi.mock('../services/GitHubService');
 
@@ -23,7 +23,7 @@ describe('GitHubUsersList', () => {
   });
 
   it('displays "Please enter a search term." when search input is empty', async () => {
-    render(<GitHubUsersList />); 
+    render(<GitHubUsersList />);
 
     expect(screen.getByText('Please enter a search term.')).toBeInTheDocument();
 

@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import CounterDisplay from './counterDisplay';
+import { CounterDisplay } from './CounterDisplay';
 
 describe('CounterDisplay', () => {
   it('renders with title and count', () => {

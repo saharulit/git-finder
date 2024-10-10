@@ -1,5 +1,5 @@
 import './App.css';
-import GitHubUsersList from './pages/GitHubUsersList';
+import { GitHubUsersList } from './pages/GitHubUsersList';
 
 function App() {
   return <GitHubUsersList />;

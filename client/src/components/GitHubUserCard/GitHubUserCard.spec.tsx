@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { GitHubUser } from '../../entities/gitHubUser';
-import Card from './GitHubUserCard';
-import GitHubUserCard from './GitHubUserCard';
+import { GitHubUserCard } from './GitHubUserCard';
 
 const mockUser: GitHubUser = {
   username: 'octocat',
@@ -11,7 +10,7 @@ const mockUser: GitHubUser = {
 
 describe('GitHubUserCard', () => {
   it('renders user information correctly', () => {
-    render(<Card user={mockUser} />);
+    render(<GitHubUserCard user={mockUser} />);
     
     expect(screen.getByText('octocat')).toBeInTheDocument();
     expect(screen.getByRole('img', { name: /octocat/i })).toHaveAttribute('src', mockUser.image);
