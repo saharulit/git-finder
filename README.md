@@ -28,6 +28,8 @@ cd git-finder
 Create a .env file in the server directory and add your GitHub token:
 GITHUB_TOKEN=your_github_token_here
 
+This token is not mandatory as the application handles requests without a token. However, GitHub imposes a limit on unauthenticated requests, so adding the token allows for more searches without hitting the rate limit.
+
 ### Start the Application
 Run the following command to start both the backend and frontend simultaneously:
 
